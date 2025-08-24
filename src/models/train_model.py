@@ -4,9 +4,10 @@ import os
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 import bentoml
+from sklearn.pipeline import Pipeline
 
 ### Path
-processed_path = os.path.join("..", "..", "data", "processed/")
+processed_path = os.path.join("..", "data", "processed/")
 
 ### Import datasets
 X_train = pd.read_csv(processed_path + 'X_train.csv')
@@ -29,8 +30,15 @@ r2 = r2_score(y_pred, y_test)
 print(f"Le score R² train est : {r2_train}")
 print(f"Le score R² test est : {r2}")
 
+### Make final pipeline
+preprocessing = bentoml.sklearn.load_model("preprocessing_pipeline:latest")
+inference_model = Pipeline([
+    ("preprocessing", preprocessing),
+    ("linearregression", lr)
+])
+
 ### Save model in Bentoml
-model_ref = bentoml.sklearn.save_model("admission_lr", lr)
+model_ref = bentoml.sklearn.save_model("admission_lr", inference_model)
 print(f"Modèle enregistré sous : {model_ref.tag}")
 
 ### Verify saving
@@ -39,4 +47,4 @@ for m in bentoml.models.list():
     bentoml_model_list.append(m.tag)
 
 if model_ref.tag in bentoml_model_list:
-    print(f"Modèle 'admission:latest' bien trouvé comme : {m.tag}")
+    print(f"Modèle 'admission:latest' bien trouvé comme : {model_ref.tag}")
