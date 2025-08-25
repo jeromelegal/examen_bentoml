@@ -5,9 +5,10 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 import bentoml
 from sklearn.pipeline import Pipeline
+from lib.custom_librarie import ColumnRenamer
 
 ### Path
-processed_path = os.path.join("..", "data", "processed/")
+processed_path = os.path.join("data", "processed/")
 
 ### Import datasets
 X_train = pd.read_csv(processed_path + 'X_train.csv')
