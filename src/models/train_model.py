@@ -48,4 +48,4 @@ for m in bentoml.models.list():
     bentoml_model_list.append(m.tag)
 
 if model_ref.tag in bentoml_model_list:
-    print(f"Modèle 'admission:latest' bien trouvé comme : {model_ref.tag}")
+    print(f"Modèle 'admission_lr:latest' bien trouvé comme : {model_ref.tag}")

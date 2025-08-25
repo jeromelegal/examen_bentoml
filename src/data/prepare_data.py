@@ -94,10 +94,10 @@ X_train_scaled = preprocessing.fit_transform(X_train)
 X_test_scaled = preprocessing.transform(X_test)
 
 ### Save processed datasets
-X_train_scaled.to_csv(processed_path + 'X_train.csv')
-X_test_scaled.to_csv(processed_path + 'X_test.csv')
-y_train.to_csv(processed_path + 'y_train.csv')
-y_test.to_csv(processed_path + 'y_test.csv')
+X_train_scaled.to_csv(processed_path + 'X_train.csv', index=False)
+X_test_scaled.to_csv(processed_path + 'X_test.csv', index=False)
+y_train.to_csv(processed_path + 'y_train.csv', index=False)
+y_test.to_csv(processed_path + 'y_test.csv', index=False)
 
 
 ### Save preprocessing pipeline to add it on final pipeline
