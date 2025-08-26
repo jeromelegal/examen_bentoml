@@ -1,5 +1,7 @@
 # Examen BentoML
 
+Lien GitHub : [https://github.com/jeromelegal/examen_bentoml](https://github.com/jeromelegal/examen_bentoml)
+
 ## 1. Présentation du projet :
 
 Le projet consiste en la création d'un Bento conteneurisé avec Docker qui contient un environnement 
