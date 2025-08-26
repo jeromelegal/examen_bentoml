@@ -75,7 +75,7 @@ app.add_middleware(JWTAuthMiddleware)
 model_runner = bentoml.sklearn.get("admission_lr:latest").to_runner()
 
 ### Service for API
-svc = bentoml.Service("admission_api", runners=[model_runner])
+svc = bentoml.Service("admission_api")
    
 ### Pydantic schemas
 class LoginRequest(BaseModel):
@@ -101,7 +101,7 @@ def home():
     return {"message": "Examen Bentoml de Jérôme LE GAL",
             "session": "avr25_bootcamp_mle",
             "organisme": "DataScientest",
-            "endpoints": ["/", "/login", "/predict", "/verify", "/docs", "/test"],
+            "endpoints": ["/", "/login", "/predict", "/verify", "/docs"],
             "auth": "Utiliser /login afin de pouvoir réaliser des prédictions sur /predict"
             }
 

@@ -1,0 +1,23 @@
+service: "src.api.service:svc"
+labels:
+  owner: "Jerome LE GAL"
+  project: "## DataScientest : Admissions Prediction - BentoML 🍱"
+  description: "Predict the chance of admission of a student in a university"
+include:
+  - data/
+  - src/
+  - lib/
+models:
+  - "admission_lr:latest"
+python:
+  packages:
+    - bentoml
+    - scikit-learn
+    - pandas
+    - fastapi
+    - pydantic
+    - starlette
+    - numpy
+    - requests
+    - jwt
+
