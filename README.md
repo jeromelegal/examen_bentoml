@@ -112,7 +112,7 @@ Avec le container démarré, dans un autre terminal on lance les tests :
 
 (l'ajout de `-W ignore` supprime les warnings)
 
-Vous devez trouver 9 tests passed comme ceci :
+Vous devez trouver 10 tests passed comme ceci :
 
 ```bash
 ======================================================= 10 passed in 2.02s =======================================================
