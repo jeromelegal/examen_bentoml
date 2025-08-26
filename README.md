@@ -10,7 +10,7 @@ Le modèle est accessible via API, suite à une authentification via user/passwo
 
 Les livrables fournis sont :
 * Fichier README ==> *self*
-* Image du container ==> *bento_image.tar*
+* Image du container ==> *bento_image.tar.zip*
 * Fichier des tests unitaires ==> *api_test.py*
 
 Voici la structure du Bento 🍱 :
@@ -43,7 +43,7 @@ Voici la structure du Bento 🍱 :
     - /verify (get) : Vérification fonctionnement de l'API
     `curl -X 'GET' 'http://localhost:3000/verify'`
 
-    - /auth-test (post) : Endpoint dédié aux tests unitaires
+    - /auth-test (get) : Endpoint dédié aux tests unitaires
     `no parameters`
 
 * Login :
@@ -84,14 +84,19 @@ Voici la structure du Bento 🍱 :
 ---
 ## 3. Mise en route du *container* :
 
-Une fois l'image récupérée : **bento_image.tar**
-on la charge sur la machine avec la commande :
+Une fois l'image récupérée : **bento_image.tar.zip**
+
+Dézipper le fichier :
+
+`unzip bento_image.tar.zip`
+
+On charge l'image sur la machine avec la commande :
 
 `docker load -i bento_image.tar`
 
 On lance le container :
 
-`docker run --rm -p 3000:3000 admission_api:latest`
+`docker run --rm -p 3000:3000 admission_api:wggjfsuco6hz63wn`
 
 (les warnings apparaissant sont normaux, ils nous indiquent que des modifications 
 dans les versions > 1.4 de Bentoml ont été apportées, notamment `bentoml.Service`)
@@ -101,12 +106,14 @@ dans les versions > 1.4 de Bentoml ont été apportées, notamment `bentoml.Serv
 
 Afin de tester le code des services fournis par Bentoml, nous pouvons lancer le script Pytest à partir du fichier *api_test.py* :
 
+Avec le container démarré, dans un autre terminal on lance les tests :
+
 `pytest api_test.py -W ignore`
 
-(l'ajout de `-W ignore` limite la liste des warnings)
+(l'ajout de `-W ignore` supprime les warnings)
 
 Vous devez trouver 9 tests passed comme ceci :
 
 ```bash
-============================================ 9 passed, 3 warnings in 3.09s =============================================
+======================================================= 10 passed in 2.02s =======================================================
 ```

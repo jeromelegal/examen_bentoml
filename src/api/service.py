@@ -140,7 +140,7 @@ def verify():
     """ Vérifie que l'API est fonctionnelle. """
     return {"message": "L'API est fonctionnelle."}
 
-@app.post("/auth-test", tags=['test'])
+@app.get("/auth-test", tags=['test'])
 async def auth_test(request: Request):
     """ Route factice protégée par le middleware JWT pour test """
     user = request.state.user if hasattr(request.state, 'user') else None

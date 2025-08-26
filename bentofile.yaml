@@ -13,8 +13,6 @@ python:
     - scikit-learn
     - pandas
     - fastapi
-    - pydantic
-    - starlette
     - numpy
     - requests
     - PyJWT

@@ -1,12 +1,11 @@
 from fastapi.testclient import TestClient
-from src.api.service import app
 import jwt
 from datetime import datetime, timedelta
 import requests
 
-client = TestClient(app)
 
 ### Variables
+BASE = "http://localhost:3000"
 JWT_SECRET_KEY = "secret_key_for_bentoml_exam"
 JWT_ALGORITHM = "HS256"
 TEST_FEATURES = {
@@ -33,27 +32,27 @@ def create_token(user_id: str, expire_delta_hours: int):
 ### Authentication tests
 # Missing token
 def test_auth_missing_token():
-    response = client.post("/auth-test")
+    response = requests.get(f"{BASE}/auth-test")
     assert response.status_code == 401
     assert response.json() == {"detail": "Missing authentication token"}
 
 # Expired token
 def test_auth_expired_token():
     expired_token = create_token("user_test", expire_delta_hours=-1)
-    response = client.post("/auth-test", headers={"Authorization": f"Bearer {expired_token}"})
+    response = requests.get(f"{BASE}/auth-test", headers={"Authorization": f"Bearer {expired_token}"})
     assert response.status_code == 401
     assert response.json() == {"detail": "Token has expired"}
 
 # Invalid token
 def test_auth_invalid_token():
-    response = client.post("/auth-test", headers={"Authorization": "Bearer FAUX_TOKEN"})
+    response = requests.get(f"{BASE}/auth-test", headers={"Authorization": "Bearer FAUX_TOKEN"})
     assert response.status_code == 401
     assert response.json() == {"detail": "Invalid token"}
 
 # Valid token
 def test_auth_valid_token():
     valid_token = create_token("user_test", expire_delta_hours=1)
-    response = client.post("/auth-test", headers={"Authorization": f"Bearer {valid_token}"})
+    response = requests.get(f"{BASE}/auth-test", headers={"Authorization": f"Bearer {valid_token}"})
     assert response.status_code == 200
     assert response.json() == {"user": "user_test"}
 
@@ -62,21 +61,21 @@ def test_auth_valid_token():
 
 # Giving valid token for known users
 def test_known_user():
-    response = client.post("/login", json={"username": "user_test",
+    response = requests.post(f"{BASE}/login", json={"username": "user_test",
                                            "password": "DataScientest_mle"})
     assert response.status_code == 200
     assert "token" in response.json()
 
 # Bad username test
 def test_bad_username():
-    response = client.post("/login", json={"username": "baduser",
+    response = requests.post(f"{BASE}/login", json={"username": "baduser",
                                             "password": "DataScientest_mle"})
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid credentials"
 
 # Bad password test
-def test_bad_username():
-    response = client.post("/login", json={"username": "user_test",
+def test_bad_password():
+    response = requests.post(f"{BASE}/login", json={"username": "user_test",
                                             "password": "badpassword"})
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid credentials"
@@ -86,13 +85,13 @@ def test_bad_username():
 
 # Missing token on predict endpoint
 def test_missing_token_predict():
-    response = client.post("/predict", json=TEST_FEATURES)
+    response = requests.post(f"{BASE}/predict", json=TEST_FEATURES)
     assert response.status_code == 401
     assert response.json() == {"detail": "Missing authentication token"}
 
 # Correct prediction test
 def test_correct_prediction():
-    login_response = requests.post("http://localhost:3000/login", json={
+    login_response = requests.post(f"{BASE}/login", json={
         "username": "user_test",
         "password": "DataScientest_mle"
     })
@@ -100,7 +99,7 @@ def test_correct_prediction():
     token = login_response.json()["token"]
 
     pred_response = requests.post(
-        "http://localhost:3000/predict",
+        f"{BASE}/predict",
         json=TEST_FEATURES,
         headers={"Authorization": f"Bearer {token}"}
     )
@@ -109,14 +108,14 @@ def test_correct_prediction():
 
 # Incorrect inputs return error
 def test_incorrect_prediction():
-    login_response = requests.post("http://localhost:3000/login", json={
+    login_response = requests.post(f"{BASE}/login", json={
         "username": "user_test",
         "password": "DataScientest_mle"
     })
     assert login_response.status_code == 200
     token = login_response.json()["token"]
     pred_response = requests.post(
-        "http://localhost:3000/predict",
+        f"{BASE}/predict",
         json={"GRE": 3, "TOEFL": "toto",},
         headers={"Authorization": f"Bearer {token}"}
     )
