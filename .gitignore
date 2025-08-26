@@ -4,3 +4,4 @@
 /clean_data.csv
 *.csv
 /lib/__pycache__/*
+bento_image.tar
