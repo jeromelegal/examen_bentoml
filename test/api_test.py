@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from api.service import app
+from src.api.service import app
 import jwt
 from datetime import datetime, timedelta
 import requests
@@ -33,27 +33,27 @@ def create_token(user_id: str, expire_delta_hours: int):
 ### Authentication tests
 # Missing token
 def test_auth_missing_token():
-    response = client.get("/auth-test")
+    response = client.post("/auth-test")
     assert response.status_code == 401
     assert response.json() == {"detail": "Missing authentication token"}
 
 # Expired token
 def test_auth_expired_token():
     expired_token = create_token("user_test", expire_delta_hours=-1)
-    response = client.get("/auth-test", headers={"Authorization": f"Bearer {expired_token}"})
+    response = client.post("/auth-test", headers={"Authorization": f"Bearer {expired_token}"})
     assert response.status_code == 401
     assert response.json() == {"detail": "Token has expired"}
 
 # Invalid token
 def test_auth_invalid_token():
-    response = client.get("/auth-test", headers={"Authorization": "Bearer FAUX_TOKEN"})
+    response = client.post("/auth-test", headers={"Authorization": "Bearer FAUX_TOKEN"})
     assert response.status_code == 401
     assert response.json() == {"detail": "Invalid token"}
 
 # Valid token
 def test_auth_valid_token():
     valid_token = create_token("user_test", expire_delta_hours=1)
-    response = client.get("/auth-test", headers={"Authorization": f"Bearer {valid_token}"})
+    response = client.post("/auth-test", headers={"Authorization": f"Bearer {valid_token}"})
     assert response.status_code == 200
     assert response.json() == {"user": "user_test"}
 

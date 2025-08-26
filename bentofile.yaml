@@ -7,11 +7,9 @@ include:
   - data/
   - src/
   - lib/
-models:
-  - "admission_lr:latest"
 python:
   packages:
-    - bentoml
+    - "bentoml==1.3.16"
     - scikit-learn
     - pandas
     - fastapi
@@ -19,5 +17,7 @@ python:
     - starlette
     - numpy
     - requests
-    - jwt
+    - PyJWT
+models:
+  - "admission_lr:latest"
 

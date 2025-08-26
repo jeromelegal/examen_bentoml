@@ -75,7 +75,7 @@ app.add_middleware(JWTAuthMiddleware)
 model_runner = bentoml.sklearn.get("admission_lr:latest").to_runner()
 
 ### Service for API
-svc = bentoml.Service("admission_api")
+svc = bentoml.Service("admission_api", runners=[model_runner])
    
 ### Pydantic schemas
 class LoginRequest(BaseModel):
@@ -140,7 +140,7 @@ def verify():
     """ Vérifie que l'API est fonctionnelle. """
     return {"message": "L'API est fonctionnelle."}
 
-@app.get("/auth-test", tags=['test'])
+@app.post("/auth-test", tags=['test'])
 async def auth_test(request: Request):
     """ Route factice protégée par le middleware JWT pour test """
     user = request.state.user if hasattr(request.state, 'user') else None
